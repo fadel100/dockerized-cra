@@ -31,5 +31,5 @@ jobs:
       # - run: npm install
       # - run: npm run build --prefix client
       - name: run container and test
-        run: docker run fadel100/dockerized-cra npm run test
+        run: docker run -e CI=true fadel100/dockerized-cra npm run test
       # - run: npm run test
