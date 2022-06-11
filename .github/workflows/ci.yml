@@ -1,0 +1,35 @@
+name: dockerized cra ci
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+jobs:
+  build:
+    env:
+      CI: true
+      # MONGO_URL: mongodb://localhost/nasa
+    # strategy:
+    #   matrix:
+    #     node=version: [14.x, 16.x]
+    #     mongodb-version: ["4.4"]
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Build Docker Image
+        run:
+          docker build -t fadel100/dockerized-cra -f Dockerfile.dev .
+      # - name: Use node.js version 16
+      #   uses: actions/setup-node@v2
+      #   with:
+      #     node-version: "16"
+      # - name: use mongodb for testing
+      #   uses: supercharge/mongodb-github-action@1.7.0
+      #   with:
+      #     mongodb-version: ${{matrix.mongodb-version}}
+      # - run: npm install
+      # - run: npm run build --prefix client
+      - name: run container and test
+        run: docker run fadel100/dockerized-cra npm run test
+      # - run: npm run test
