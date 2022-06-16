@@ -61,6 +61,6 @@ jobs:
  # app dockerized-cra-app2
  # env dockerized-cra-env2
  # region eu-central-1
- # Access key ID AKIAUYIZ56YSRCA4GGJ4
- # Secret access key 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
+ # Access key ID AKIAUYIZ56YSRCA4GGJ <4
+ # Secret access key M4kA0YY3U25P1XW4e8GhKtNfTFSCjk1qG8XN5K/ <u
  
