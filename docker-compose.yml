@@ -19,8 +19,5 @@ services:
     volumes:
       - /app/node_modules
       - .:/app
-    # environment:
-    #   - WATCHPACK_POLLING=true
-    #   - CHOKIDAR_USEPOLLING=true
-    #   - FAST_REFRESH=true
+    
     command: ["npm", "run", "test"]

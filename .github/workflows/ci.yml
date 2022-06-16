@@ -1,15 +1,18 @@
+# workflow name
 name: dockerized cra ci
-
+# events that this workflow is triggered on
 on:
   push:
     branches: [main]
   pull_request:
     branches: [main]
+# gives me a button to trigger the workflow
+  workflow-dispatch:
 jobs:
   build:
-    env:
-      CI: true
-      # MONGO_URL: mongodb://localhost/nasa
+    # env:
+    #   CI: true
+    # MONGO_URL: mongodb://localhost/nasa
     # strategy:
     #   matrix:
     #     node=version: [14.x, 16.x]
@@ -32,4 +35,32 @@ jobs:
       # - run: npm run build --prefix client
       - name: run container and test
         run: docker run -e CI=true fadel100/dockerized-cra npm run test
+      # - if: ${{ success() }}
       # - run: npm run test
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Generate Deployment Package 
+        # zip all files except .git
+        run: zip -r deploy.zip * -x '*.git*'
+      - name: Deploy to EB
+        uses: einaregilsson/beanstalk-deploy@v20
+         with:
+          aws_access_key: ${{ secrets.AWS_ACCESS_KEY }}
+          aws_secret_key: ${{ secrets.AWS_SECRET_KEY }}
+          application_name: dockerized-cra-app2
+          environment_name: dockerized-cra-env2
+          version_label: 1
+          region: eu-central-1
+          deployment_package: deploy.zip
+          existing_bucket_name: elasticbeanstalk-eu-central-1-327008777765
+
+# bucket name elasticbeanstalk-eu-central-1-327008777765
+ # app dockerized-cra-app2
+ # env dockerized-cra-env2
+ # region eu-central-1
+ # Access key ID AKIAUYIZ56YSRCA4GGJ4
+ # Secret access key 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
+ 
